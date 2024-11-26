@@ -1,0 +1,8 @@
+    # queryset = User.objects.annotate(
+    #     level=Case(
+    #         When(score__gt=89, then=Value('hard')),
+    #         When(score__gte=76, then=Value('medium')),
+    #         default=Value('easy'),
+    #         output_field=CharField(),
+    #     )
+    # )
