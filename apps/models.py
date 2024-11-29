@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import FileExtensionValidator
 from django.db.models import Model, CharField, PositiveIntegerField, ForeignKey, CASCADE, BooleanField, Case, When, \
-    Value
+    Value, ImageField
+from rest_framework.exceptions import ValidationError
 
 
 class User(AbstractUser):
@@ -29,3 +31,20 @@ class Product(Model):
     is_premium = BooleanField(default=False)
     category = ForeignKey('apps.Category', CASCADE, related_name='products')
     owner = ForeignKey('apps.User', CASCADE, related_name='products')
+
+
+def file_size_validator(file):
+    max_size = 10 * 1024 * 1024  # 10 MB
+    if file.size > max_size:
+        raise ValidationError(f"Hajm: {file.size / (1024 * 1024):.2f} MB")
+
+
+class ProductImage(Model):
+    product = ForeignKey('apps.Product', on_delete=CASCADE, related_name='images')
+    image = ImageField(
+        upload_to='products/image/',
+        validators=[FileExtensionValidator(
+            ['png', 'jpg', 'jpeg']),
+            file_size_validator
+        ]
+    )

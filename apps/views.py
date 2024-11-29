@@ -1,9 +1,9 @@
 from django.db.models import Count
-from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView
 
-from apps.models import Product, Category, User
-from apps.serializers import ProductModelSerializer, CategoryModelSerializer, UserModelSerializer
+from apps.models import Product, Category, User, ProductImage
+from apps.serializers import ProductModelSerializer, CategoryModelSerializer, UserModelSerializer, \
+    ProductImageModelSerializer
 
 
 class ProductListCreate(ListCreateAPIView):
@@ -19,3 +19,8 @@ class CategoryListView(ListCreateAPIView):
 class UserListCreateAPIView(ListCreateAPIView):
     queryset = User.objects.annotate(product_count=Count('products'))
     serializer_class = UserModelSerializer
+
+
+class ProductImageListCreateAPIView(ListCreateAPIView):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageModelSerializer
