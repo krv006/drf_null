@@ -1,8 +1,8 @@
-from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField, IntegerField
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
-from apps.models import Product, Category, User, ProductImage
+from apps.models import Product, Category, User, ProductImage, Film, Genre
 
 
 class CategoryModelSerializer(ModelSerializer):
@@ -10,7 +10,7 @@ class CategoryModelSerializer(ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'product_count',)
+        fields = 'id', 'name', 'product_count',
 
 
 class ProductImageModelSerializer(ModelSerializer):
@@ -56,3 +56,26 @@ class UserModelSerializer(ModelSerializer):
             return 'medium'
         else:
             return 'easy'
+
+
+class GenreModelSerializer(ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = '__all__'
+
+
+class FilmModelSerializer(ModelSerializer):
+    genres_ids = PrimaryKeyRelatedField(
+        many=True,
+        queryset=Genre.objects.all(),
+        source='genres'
+    )
+
+    class Meta:
+        model = Film
+        fields = 'id', 'name', 'released_date', 'genres_ids',
+
+    def to_representation(self, instance: Film):
+        repr = super().to_representation(instance)
+        repr['genres_ids'] = GenreModelSerializer(instance.genres.all(), many=True).data
+        return repr
