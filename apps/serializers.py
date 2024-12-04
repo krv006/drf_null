@@ -5,6 +5,23 @@ from rest_framework.serializers import ModelSerializer
 from apps.models import Product, Category, User, ProductImage, Film, Genre
 
 
+class DynamicFieldsModelSerializer(ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super().__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    # todo DynamicFieldsModelSerializer bu orqali detail lar yozsak boladi
+
 class CategoryModelSerializer(ModelSerializer):
     product_count = IntegerField(read_only=True)
 
