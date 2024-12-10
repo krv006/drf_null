@@ -34,9 +34,13 @@ class Product(Model):
     category = ForeignKey('apps.Category', CASCADE, related_name='products')
     owner = ForeignKey('apps.User', CASCADE, related_name='products')
 
+    @property
+    def last_price(self):
+        return self.price + 1000
+
 
 def file_size_validator(file):
-    max_size = 10 * 1024 * 1024  # 10 MB
+    max_size = 10 * 1024 * 1024  # todo 10 MB
     if file.size > max_size:
         raise ValidationError(f"Hajm: {file.size / (1024 * 1024):.2f} MB")
 
@@ -52,17 +56,18 @@ class ProductImage(Model):
     )
 
 
-class Film(Model):
-    name = CharField(max_length=200)
-    released_date = DateField(date.today)
-    genres = ManyToManyField('apps.Genre', related_name='films')
+class Genre(Model):
+    name = CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
 
-class Genre(Model):
-    name = CharField(max_length=100, unique=True)
+class Film(Model):
+    name = CharField(max_length=200)
+    released_date = DateField(date.today)
+    genres = ManyToManyField('apps.Genre', related_name='films')
+    owner = ForeignKey('apps.User', CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

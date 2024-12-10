@@ -1,4 +1,5 @@
-from rest_framework.fields import SerializerMethodField, IntegerField
+from rest_framework.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField, IntegerField, HiddenField, CurrentUserDefault
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
@@ -22,7 +23,8 @@ class DynamicFieldsModelSerializer(ModelSerializer):
 
     # todo DynamicFieldsModelSerializer bu orqali detail lar yozsak boladi
 
-class CategoryModelSerializer(ModelSerializer):
+
+class CategoryModelSerializer(DynamicFieldsModelSerializer):
     product_count = IntegerField(read_only=True)
 
     class Meta:
@@ -87,12 +89,24 @@ class FilmModelSerializer(ModelSerializer):
         queryset=Genre.objects.all(),
         source='genres'
     )
+    owner = HiddenField(default=CurrentUserDefault())
 
     class Meta:
         model = Film
-        fields = 'id', 'name', 'released_date', 'genres_ids',
+        fields = 'id', 'name', 'released_date', 'genres_ids', 'owner',
 
     def to_representation(self, instance: Film):
         repr = super().to_representation(instance)
         repr['genres_ids'] = GenreModelSerializer(instance.genres.all(), many=True).data
+        if instance.owner:
+            owner = instance.owner.username
+        else:
+            owner = None
+        repr['owner'] = owner
         return repr
+
+#
+# def validate_custom(value):
+#     if value < 2000:
+#         raise ValidationError('2000 dan kichik bolishi mn emas')
+#     return value
