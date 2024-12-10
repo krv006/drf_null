@@ -1,4 +1,3 @@
-from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField, IntegerField, HiddenField, CurrentUserDefault
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
@@ -36,6 +35,7 @@ class ProductImageModelSerializer(ModelSerializer):
     class Meta:
         model = ProductImage
         fields = '__all__'
+        depth = 1 # todo product malumotlarini ob bergani yordam beradi
 
 
 class ProductModelSerializer(ModelSerializer):

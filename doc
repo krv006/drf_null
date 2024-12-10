@@ -1,0 +1,56 @@
+
+========================================================================================================================
+SERIALIZERS
+
+depth = 1 -> buni vazifasi images ichida product id sini emas aksincha product ichidagi xamma narsani chiqazib beradi
+
+depth bilan
+
+{
+        "id": 1,
+        "name": "UZBEKISTAN-CHINA IS ON THE WAY OF STRENGTHENING BILATERAL RELATIONS",
+        "price": 123,
+        "is_premium": false,
+        "category": {
+            "id": 1,
+            "name": "meva"
+        },
+        "images": [
+            {
+                "id": 1,
+                "image": "http://localhost:8000/products/image/Screenshot_from_2024-12-10_00-33-55.png",
+                "product": {
+                    "id": 1,
+                    "name": "UZBEKISTAN-CHINA IS ON THE WAY OF STRENGTHENING BILATERAL RELATIONS",
+                    "price": 123,
+                    "is_premium": false,
+                    "category": 1,
+                    "owner": 1
+                }
+            }
+        ]
+    },
+
+
+depth siz
+
+    {
+        "id": 1,
+        "name": "UZBEKISTAN-CHINA IS ON THE WAY OF STRENGTHENING BILATERAL RELATIONS",
+        "price": 123,
+        "is_premium": false,
+        "category": {
+            "id": 1,
+            "name": "meva"
+        },
+        "images": [
+            {
+                "id": 1,
+                "image": "http://localhost:8000/products/image/Screenshot_from_2024-12-10_00-33-55.png",
+                "product": 1
+            }
+        ]
+    }
+
+
+========================================================================================================================
