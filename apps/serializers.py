@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField, IntegerField, HiddenField, CurrentUserDefault
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
@@ -105,8 +106,8 @@ class FilmModelSerializer(ModelSerializer):
         repr['owner'] = owner
         return repr
 
-#
-# def validate_custom(value):
-#     if value < 2000:
-#         raise ValidationError('2000 dan kichik bolishi mn emas')
-#     return value
+
+def validate_custom(value):
+    if value < 2000:
+        raise ValidationError('2000 dan kichik bolishi mn emas')
+    return value
